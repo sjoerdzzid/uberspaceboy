@@ -109,6 +109,35 @@ function DeleteGarbage () {
         }
     }
 }
+
+function menu2 () {
+    nebulaRow = 0
+    temp_star = null
+    bright = 0
+    temp_pos = 0
+    // Array to hold brightness values for each row
+    rowBrightness = [
+    10,
+    50,
+    20,
+    60,
+    20
+    ]
+    ExplosionParticles = []
+    menuSpeed = 100
+    gameSpeed = 100
+    enemySpeed = 200
+    garbageCollectorSpeed = 3000
+    // let background_nebula = initNebula()
+    soundOn = true
+    ExplosionParticleDirections = [
+    -135,
+    135,
+    45,
+    -45
+    ]
+    initMenu()
+}
 function startGame () {
     menuActive = false
     game.setLife(5)
@@ -123,6 +152,26 @@ input.onButtonPressed(Button.A, function () {
         Spaceship.change(LedSpriteProperty.X, -1)
     }
 })
+// Apply the brightness to each row in the nebula
+// for (let y2 = 0; y2 <= background_nebula.length - 1; y2++) {
+// bright = rowBrightness[y2]
+// for (let sprite of background_nebula[y2]) {
+// sprite.set(LedSpriteProperty.Brightness, bright)
+// }
+// }
+function handleNebula () {
+    // Shift the brightness values down by one row
+    // Store the brightness of the last row
+    lastBrightness = rowBrightness[rowBrightness.length - 1]
+    for (let i = rowBrightness.length - 1; i > 0; i--) {
+        rowBrightness[i] = rowBrightness[i - 1]
+    }
+// Wrap the last row's brightness to the first row
+    // Wrap the last row's brightness to the first row
+    // Wrap the last row's brightness to the first row
+    // Wrap the last row's brightness to the first row
+    rowBrightness[0] = lastBrightness
+}
 // function handleNebula () {
 // // Reset brightness of all rows to 0
 // for (let row2 of background_nebula) {
@@ -208,20 +257,292 @@ function navigateMenu (direction: number) {
     }
     showMenuItem(MenuItems[menuIndex])
 }
+\
 function EnemyFire () {
     ActiveEnemyFire.push(game.createSprite(SpaceDestroyer.get(LedSpriteProperty.X), SpaceDestroyer.get(LedSpriteProperty.Y) + 1))
 }
 let menuIndex = 0
 let MenuItems: string[] = []
 let gameStarted = false
+
+function menu1 () {
+    basic.showLeds(`
+        . # . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        . . # . .
+        `)
+    basic.showLeds(`
+        . # . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        . # . . .
+        `)
+    basic.showLeds(`
+        . # . . .
+        . . . . .
+        . . . . .
+        . # . . .
+        . # . . .
+        `)
+    music.play(music.createSoundExpression(WaveShape.Square, 1600, 1, 255, 0, 300, SoundExpressionEffect.None, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
+    basic.showLeds(`
+        . # . . .
+        . . . . .
+        . # . . .
+        . . . . .
+        . # . . .
+        `)
+    basic.showLeds(`
+        . # . . .
+        . # . . .
+        . . . . .
+        . . . . .
+        . # . . .
+        `)
+    basic.showLeds(`
+        . # # . .
+        . . # . .
+        . . . . .
+        . . . . .
+        . # . . .
+        `)
+    basic.showLeds(`
+        . . # # .
+        . . # . .
+        . . . # .
+        . . . . .
+        . # . . .
+        `)
+    basic.showLeds(`
+        # . . # #
+        . . . . .
+        . . . # .
+        . . . . #
+        . # . . .
+        `)
+    basic.showLeds(`
+        # . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        # . . . .
+        `)
+    basic.showLeds(`
+        # . . . .
+        . . . . .
+        . . . . .
+        # . . . .
+        # . . . .
+        `)
+    music.play(music.createSoundExpression(WaveShape.Square, 1600, 1, 255, 0, 300, SoundExpressionEffect.None, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
+    basic.showLeds(`
+        # . . . .
+        . . . . .
+        # . . . .
+        . . . . .
+        # . . . .
+        `)
+    basic.showLeds(`
+        # . . . .
+        # . . . .
+        . . . . .
+        . . . . .
+        # . . . .
+        `)
+    basic.showLeds(`
+        # # . . .
+        . # . . .
+        . . . . .
+        . . . . .
+        # . . . .
+        `)
+    basic.showLeds(`
+        . # # . .
+        . # . . .
+        . . # . .
+        . . . . .
+        # . . . .
+        `)
+    basic.showLeds(`
+        . # # # .
+        . # . . .
+        . . # . .
+        . . . # .
+        # . . . .
+        `)
+    basic.showLeds(`
+        . . # # #
+        . . . . .
+        . . # . .
+        . . . # .
+        # . . . #
+        `)
+    basic.showLeds(`
+        . . . . #
+        . . . . .
+        . . . . .
+        . . . . .
+        . # . . .
+        `)
+    basic.showLeds(`
+        . . . . #
+        . . . . .
+        . . . . .
+        . . . . .
+        . . # . .
+        `)
+    basic.showLeds(`
+        . . . . #
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . # .
+        `)
+    basic.showLeds(`
+        . . . . #
+        . . . . #
+        . . . . .
+        . . . . .
+        . . . . #
+        `)
+    music.play(music.createSoundExpression(WaveShape.Square, 1600, 1, 255, 0, 300, SoundExpressionEffect.None, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
+    basic.showLeds(`
+        . . . . #
+        . . . . .
+        . . . . #
+        . . . . .
+        . . . . #
+        `)
+    basic.showLeds(`
+        . . . . #
+        . . . . .
+        . . . . .
+        . . . . #
+        . . . . #
+        `)
+    basic.showLeds(`
+        . . . . #
+        . . . . .
+        . . # . .
+        . . . # .
+        . . # # #
+        `)
+    basic.showLeds(`
+        . . . . #
+        . # . . .
+        . . # . #
+        . . . # #
+        . . # # #
+        `)
+    basic.showLeds(`
+        . . . . #
+        . # . # #
+        . . # # #
+        . . # # #
+        . # # # #
+        `)
+    basic.showLeds(`
+        # . # # #
+        . # # # #
+        . # # # #
+        . # # # #
+        # # # # #
+        `)
+    basic.showLeds(`
+        # # # # #
+        . # # # #
+        # # # # #
+        # # # # #
+        # # # # #
+        `)
+    basic.showLeds(`
+        # # # # #
+        # # # # #
+        # # # # #
+        # # # # #
+        # # # # #
+        `)
+    basic.showLeds(`
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        . . # . .
+        `)
+    basic.showLeds(`
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        . . # . .
+        `)
+    basic.showLeds(`
+        . . . . .
+        . . . . .
+        . . . . .
+        . . # . .
+        . # # # .
+        `)
+    basic.showLeds(`
+        . . . . .
+        . . . . .
+        . . # . .
+        . # # # .
+        # # # # #
+        `)
+    basic.showLeds(`
+        . . . . .
+        . . # . .
+        . # # # .
+        # # # # #
+        # . # . #
+        `)
+    music.stopMelody(MelodyStopOptions.All)
+    menu2()
+}
+function initStars () {
+    let StarSprites: game.LedSprite[] = []
+    starPosY = [
+    4,
+    8,
+    16,
+    12,
+    0
+    ]
+    for (let x2 = 0; x2 <= 4; x2++) {
+        StarSprites.push(game.createSprite(x2, starPosY[x2]))
+    }
+    for (let p of StarSprites) {
+        p.set(LedSpriteProperty.Direction, 180)
+    }
+}
+function EnemyFire () {
+	
+}
+let starPosY: number[] = []
+let menuIndex = 0
+let MenuItems: string[] = []
+let lastBrightness = 0
+let sprite: game.LedSprite = null
 let menuActive = false
+let garbageCollectorSpeed = 0
+let enemySpeed = 0
+let gameSpeed = 0
+let menuSpeed = 0
+let rowBrightness: number[] = []
+let temp_pos = 0
+let bright = 0
+let temp_star = 0
+let nebulaRow = 0
 let temp_particle: game.LedSprite = null
-let Spaceship: game.LedSprite = null
-let SpaceDestroyer: game.LedSprite = null
-let ActiveBullets: game.LedSprite[] = []
 let ExplosionParticleDirections: number[] = []
+let Spaceship: game.LedSprite = null
 let soundOn = false
 let ExplosionParticles: game.LedSprite[] = []
+
 let ActiveEnemyFire: game.LedSprite[] = []
 let temp_pos = 0
 ActiveEnemyFire = []
@@ -240,6 +561,10 @@ ExplosionParticleDirections = [
 -45
 ]
 initMenu()
+
+let SpaceDestroyer: game.LedSprite = null
+let ActiveBullets: game.LedSprite[] = []
+menu1()
 loops.everyInterval(garbageCollectorSpeed, function () {
     DeleteGarbage()
 })
@@ -253,5 +578,12 @@ loops.everyInterval(enemyFireSpeed, function () {
 loops.everyInterval(gameSpeed, function () {
     if (gameStarted) {
         UpdateSpace()
+    }
+})
+loops.everyInterval(200, function () {
+    // handleNebula()
+    // handleStar(index)
+    for (let index = 0; index <= 4; index++) {
+    	
     }
 })
