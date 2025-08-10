@@ -221,40 +221,17 @@ function confirmMenu () {
 // }
 // }
 input.onButtonPressed(Button.AB, function () {
+    let intro = 0
     if (menuActive) {
         confirmMenu()
     } else {
         SpaceShipFire()
     }
-})
-input.onButtonPressed(Button.B, function () {
-    if (menuActive) {
-        navigateMenu(1)
-    } else {
-        Spaceship.change(LedSpriteProperty.X, 1)
+    if (intro) {
+        menu2()
     }
 })
-function initMenu () {
-    menuActive = true
-    MenuItems = ["START", "SOUND", "SPEED"]
-    menuIndex = 0
-    menuActive = true
-    showMenuItem("START")
-}
-function spawnSpaceDestroyer () {
-    SpaceDestroyer = game.createSprite(randint(0, 4), 0)
-}
-function navigateMenu (direction: number) {
-    menuIndex += direction
-    if (menuIndex < 0) {
-        menuIndex = MenuItems.length - 1
-    }
-    if (menuIndex >= MenuItems.length) {
-        menuIndex = 0
-    }
-    showMenuItem(MenuItems[menuIndex])
-}
-function menu1 () {
+function Intro () {
     basic.showLeds(`
         . # . . .
         . . . . .
@@ -276,7 +253,6 @@ function menu1 () {
         . # . . .
         . # . . .
         `)
-    music.play(music.createSoundExpression(WaveShape.Square, 1600, 1, 255, 0, 300, SoundExpressionEffect.None, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
     basic.showLeds(`
         . # . . .
         . . . . .
@@ -326,7 +302,6 @@ function menu1 () {
         # . . . .
         # . . . .
         `)
-    music.play(music.createSoundExpression(WaveShape.Square, 1600, 1, 255, 0, 300, SoundExpressionEffect.None, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
     basic.showLeds(`
         # . . . .
         . . . . .
@@ -397,7 +372,6 @@ function menu1 () {
         . . . . .
         . . . . #
         `)
-    music.play(music.createSoundExpression(WaveShape.Square, 1600, 1, 255, 0, 300, SoundExpressionEffect.None, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
     basic.showLeds(`
         . . . . #
         . . . . .
@@ -465,8 +439,29 @@ function menu1 () {
         # # # # #
         # # # # #
         # # # # #
-        # # # # #
         # . # . #
+        . . . . .
+        `)
+    basic.showLeds(`
+        # # # # #
+        # # # # #
+        . # . # .
+        . . . . .
+        . . . . .
+        `)
+    basic.showLeds(`
+        # . # . #
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        `)
+    basic.showLeds(`
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        . . # . .
         `)
     basic.showLeds(`
         . . . . .
@@ -491,6 +486,36 @@ function menu1 () {
         `)
     music.stopMelody(MelodyStopOptions.All)
     menu2()
+}
+input.onButtonPressed(Button.B, function () {
+    if (menuActive) {
+        navigateMenu(1)
+    } else {
+        Spaceship.change(LedSpriteProperty.X, 1)
+    }
+})
+function initMenu () {
+    menuActive = true
+    MenuItems = ["START", "SOUND", "SPEED"]
+    menuIndex = 0
+    menuActive = true
+    showMenuItem("START")
+}
+function Intro1 () {
+	
+}
+function spawnSpaceDestroyer () {
+    SpaceDestroyer = game.createSprite(randint(0, 4), 0)
+}
+function navigateMenu (direction: number) {
+    menuIndex += direction
+    if (menuIndex < 0) {
+        menuIndex = MenuItems.length - 1
+    }
+    if (menuIndex >= MenuItems.length) {
+        menuIndex = 0
+    }
+    showMenuItem(MenuItems[menuIndex])
 }
 function initStars () {
     let StarSprites: game.LedSprite[] = []
@@ -533,7 +558,7 @@ let soundOn = false
 let ExplosionParticles: game.LedSprite[] = []
 let SpaceDestroyer: game.LedSprite = null
 let ActiveBullets: game.LedSprite[] = []
-menu1()
+Intro()
 loops.everyInterval(garbageCollectorSpeed, function () {
     DeleteGarbage()
 })
