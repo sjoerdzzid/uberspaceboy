@@ -11,22 +11,20 @@ function UpdateSpace () {
         }
     }
     for (let enemyBullet of ActiveEnemyFire) {
-        if (enemyBullet.get(LedSpriteProperty.Y) < 5) {
+        if (enemyBullet.get(LedSpriteProperty.Y) <= 5) {
             enemyBullet.change(LedSpriteProperty.Y, 1)
-            enemyBullet.change(LedSpriteProperty.Brightness, -30)
-        } else {
-            enemyBullet.change(LedSpriteProperty.Brightness, -60)
-        }
-        if (enemyBullet.get(LedSpriteProperty.Y) == 5) {
-            enemyBullet.delete()
         }
         if (enemyBullet.isTouching(Spaceship)) {
+            enemyBullet.delete()
             music.play(music.builtinPlayableSoundEffect(soundExpression.sad), music.PlaybackMode.InBackground)
+            ActiveEnemyFire.removeAt(ActiveEnemyFire.indexOf(enemyBullet))
+        }
+        if (enemyBullet.get(LedSpriteProperty.Y) == 4) {
+            basic.pause(100)
+            ActiveEnemyFire.removeAt(ActiveEnemyFire.indexOf(enemyBullet))
             enemyBullet.delete()
         }
     }
-        // Remove deleted enemy bullets from the list
-        ActiveEnemyFire = ActiveEnemyFire.filter(bullet => !bullet.isDeleted())
     for (let particle of ExplosionParticles) {
         if (particle.isTouchingEdge()) {
             particle.change(LedSpriteProperty.Brightness, -60)
