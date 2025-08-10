@@ -16,7 +16,7 @@ function UpdateSpace () {
         }
         if (enemyBullet.isTouching(Spaceship)) {
             enemyBullet.delete()
-            music.play(music.builtinPlayableSoundEffect(soundExpression.sad), music.PlaybackMode.InBackground)
+            game.removeLife(1)
             ActiveEnemyFire.removeAt(ActiveEnemyFire.indexOf(enemyBullet))
         }
         if (enemyBullet.get(LedSpriteProperty.Y) == 4) {
@@ -78,6 +78,7 @@ function SpaceShipFire () {
     ActiveBullets.push(game.createSprite(Spaceship.get(LedSpriteProperty.X), Spaceship.get(LedSpriteProperty.Y) - 1))
 }
 function EnemyExplode () {
+    points += 1
     for (let direction of ExplosionParticleDirections) {
         temp_particle = game.createSprite(SpaceDestroyer.get(LedSpriteProperty.X), 0)
         temp_particle.set(LedSpriteProperty.Direction, direction)
@@ -181,6 +182,26 @@ input.onButtonPressed(Button.AB, function () {
         SpaceShipFire()
     }
 })
+function init () {
+    temp_pos = 0
+    ActiveEnemyFire = []
+    ExplosionParticles = []
+    menuSpeed = 100
+    gameSpeed = 100
+    enemySpeed = 200
+    enemyFireSpeed = 3500
+    points = 0
+    garbageCollectorSpeed = 3000
+    // let background_nebula = initNebula()
+    soundOn = true
+    ExplosionParticleDirections = [
+    -135,
+    135,
+    45,
+    -45
+    ]
+    initMenu()
+}
 input.onButtonPressed(Button.B, function () {
     if (menuActive) {
         navigateMenu(1)
@@ -211,35 +232,26 @@ function navigateMenu (direction: number) {
 function EnemyFire () {
     ActiveEnemyFire.push(game.createSprite(SpaceDestroyer.get(LedSpriteProperty.X), SpaceDestroyer.get(LedSpriteProperty.Y) + 1))
 }
+let garbageCollectorSpeed = 0
+let enemyFireSpeed = 0
+let enemySpeed = 0
+let gameSpeed = 0
+let menuSpeed = 0
+let temp_pos = 0
 let menuIndex = 0
 let MenuItems: string[] = []
 let gameStarted = false
 let menuActive = false
 let temp_particle: game.LedSprite = null
-let Spaceship: game.LedSprite = null
-let SpaceDestroyer: game.LedSprite = null
-let ActiveBullets: game.LedSprite[] = []
 let ExplosionParticleDirections: number[] = []
+let points = 0
 let soundOn = false
 let ExplosionParticles: game.LedSprite[] = []
+let Spaceship: game.LedSprite = null
 let ActiveEnemyFire: game.LedSprite[] = []
-let temp_pos = 0
-ActiveEnemyFire = []
-ExplosionParticles = []
-let menuSpeed = 100
-let gameSpeed = 100
-let enemySpeed = 200
-let enemyFireSpeed = 3500
-let garbageCollectorSpeed = 3000
-// let background_nebula = initNebula()
-soundOn = true
-ExplosionParticleDirections = [
--135,
-135,
-45,
--45
-]
-initMenu()
+let SpaceDestroyer: game.LedSprite = null
+let ActiveBullets: game.LedSprite[] = []
+init()
 loops.everyInterval(garbageCollectorSpeed, function () {
     DeleteGarbage()
 })
