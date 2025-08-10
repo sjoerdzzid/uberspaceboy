@@ -69,6 +69,7 @@ function EnemyExplode () {
         ExplosionParticles.push(temp_particle)
     }
     SpaceDestroyer.delete()
+    score += 1
     spawnSpaceDestroyer()
 }
 function PlaySound (sound: string) {
@@ -512,6 +513,7 @@ function Game1 () {
     temp_star = null
     bright = 0
     temp_pos = 0
+    score = 0
     // Array to hold brightness values for each row
     rowBrightness = [
     10,
@@ -550,6 +552,7 @@ let rowBrightness: number[] = []
 let lastBrightness = 0
 let sprite: game.LedSprite = null
 let menuActive = false
+let score = 0
 let temp_particle: game.LedSprite = null
 let ExplosionParticleDirections: number[] = []
 let Spaceship: game.LedSprite = null
