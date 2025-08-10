@@ -94,34 +94,6 @@ function DeleteGarbage () {
         }
     }
 }
-function menu2 () {
-    nebulaRow = 0
-    temp_star = null
-    bright = 0
-    temp_pos = 0
-    // Array to hold brightness values for each row
-    rowBrightness = [
-    10,
-    50,
-    20,
-    60,
-    20
-    ]
-    ExplosionParticles = []
-    menuSpeed = 100
-    gameSpeed = 100
-    enemySpeed = 200
-    garbageCollectorSpeed = 3000
-    // let background_nebula = initNebula()
-    soundOn = true
-    ExplosionParticleDirections = [
-    -135,
-    135,
-    45,
-    -45
-    ]
-    initMenu()
-}
 function startGame () {
     menuActive = false
     game.setLife(5)
@@ -221,17 +193,40 @@ function confirmMenu () {
 // }
 // }
 input.onButtonPressed(Button.AB, function () {
-    let intro = 0
     if (menuActive) {
         confirmMenu()
     } else {
         SpaceShipFire()
     }
-    if (intro) {
-        menu2()
+})
+input.onButtonPressed(Button.B, function () {
+    if (menuActive) {
+        navigateMenu(1)
+    } else {
+        Spaceship.change(LedSpriteProperty.X, 1)
     }
 })
-function Intro () {
+function initMenu () {
+    menuActive = true
+    MenuItems = ["START", "SOUND", "SPEED"]
+    menuIndex = 0
+    menuActive = true
+    showMenuItem("START")
+}
+function spawnSpaceDestroyer () {
+    SpaceDestroyer = game.createSprite(randint(0, 4), 0)
+}
+function navigateMenu (direction: number) {
+    menuIndex += direction
+    if (menuIndex < 0) {
+        menuIndex = MenuItems.length - 1
+    }
+    if (menuIndex >= MenuItems.length) {
+        menuIndex = 0
+    }
+    showMenuItem(MenuItems[menuIndex])
+}
+function menu1 () {
     basic.showLeds(`
         . # . . .
         . . . . .
@@ -450,7 +445,14 @@ function Intro () {
         . . . . .
         `)
     basic.showLeds(`
+        # # # # #
         # . # . #
+        . . . . .
+        . . . . .
+        . . . . .
+        `)
+    basic.showLeds(`
+        . # . # .
         . . . . .
         . . . . .
         . . . . .
@@ -484,38 +486,7 @@ function Intro () {
         # # # # #
         # . # . #
         `)
-    music.stopMelody(MelodyStopOptions.All)
-    menu2()
-}
-input.onButtonPressed(Button.B, function () {
-    if (menuActive) {
-        navigateMenu(1)
-    } else {
-        Spaceship.change(LedSpriteProperty.X, 1)
-    }
-})
-function initMenu () {
-    menuActive = true
-    MenuItems = ["START", "SOUND", "SPEED"]
-    menuIndex = 0
-    menuActive = true
-    showMenuItem("START")
-}
-function Intro1 () {
-	
-}
-function spawnSpaceDestroyer () {
-    SpaceDestroyer = game.createSprite(randint(0, 4), 0)
-}
-function navigateMenu (direction: number) {
-    menuIndex += direction
-    if (menuIndex < 0) {
-        menuIndex = MenuItems.length - 1
-    }
-    if (menuIndex >= MenuItems.length) {
-        menuIndex = 0
-    }
-    showMenuItem(MenuItems[menuIndex])
+    Game1()
 }
 function initStars () {
     let StarSprites: game.LedSprite[] = []
@@ -536,21 +507,49 @@ function initStars () {
 function EnemyFire () {
 	
 }
-let starPosY: number[] = []
-let menuIndex = 0
-let MenuItems: string[] = []
-let lastBrightness = 0
-let sprite: game.LedSprite = null
-let menuActive = false
+function Game1 () {
+    nebulaRow = 0
+    temp_star = null
+    bright = 0
+    temp_pos = 0
+    // Array to hold brightness values for each row
+    rowBrightness = [
+    10,
+    50,
+    20,
+    60,
+    20
+    ]
+    ExplosionParticles = []
+    menuSpeed = 100
+    gameSpeed = 100
+    enemySpeed = 200
+    garbageCollectorSpeed = 3000
+    // let background_nebula = initNebula()
+    soundOn = true
+    ExplosionParticleDirections = [
+    -135,
+    135,
+    45,
+    -45
+    ]
+    initMenu()
+}
 let garbageCollectorSpeed = 0
 let enemySpeed = 0
 let gameSpeed = 0
 let menuSpeed = 0
-let rowBrightness: number[] = []
 let temp_pos = 0
 let bright = 0
 let temp_star = 0
 let nebulaRow = 0
+let starPosY: number[] = []
+let menuIndex = 0
+let MenuItems: string[] = []
+let rowBrightness: number[] = []
+let lastBrightness = 0
+let sprite: game.LedSprite = null
+let menuActive = false
 let temp_particle: game.LedSprite = null
 let ExplosionParticleDirections: number[] = []
 let Spaceship: game.LedSprite = null
@@ -558,7 +557,7 @@ let soundOn = false
 let ExplosionParticles: game.LedSprite[] = []
 let SpaceDestroyer: game.LedSprite = null
 let ActiveBullets: game.LedSprite[] = []
-Intro()
+menu1()
 loops.everyInterval(garbageCollectorSpeed, function () {
     DeleteGarbage()
 })
@@ -567,6 +566,11 @@ loops.everyInterval(garbageCollectorSpeed, function () {
 loops.everyInterval(gameSpeed, function () {
     if (!(menuActive)) {
         UpdateSpace()
+    }
+})
+basic.forever(function () {
+    if (game.isGameOver()) {
+        Game1()
     }
 })
 loops.everyInterval(200, function () {
