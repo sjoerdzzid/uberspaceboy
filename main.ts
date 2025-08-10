@@ -15,12 +15,12 @@ function UpdateSpace () {
             enemyBullet.change(LedSpriteProperty.Y, 1)
         }
         if (enemyBullet.isTouching(Spaceship)) {
+            game.removeLife(0)
             enemyBullet.delete()
             music.play(music.builtinPlayableSoundEffect(soundExpression.sad), music.PlaybackMode.InBackground)
             ActiveEnemyFire.removeAt(ActiveEnemyFire.indexOf(enemyBullet))
         }
         if (enemyBullet.get(LedSpriteProperty.Y) == 4) {
-            game.removeLife(0)
             basic.pause(100)
             ActiveEnemyFire.removeAt(ActiveEnemyFire.indexOf(enemyBullet))
             enemyBullet.delete()
