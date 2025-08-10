@@ -25,6 +25,8 @@ function UpdateSpace () {
             enemyBullet.delete()
         }
     }
+        // Remove deleted enemy bullets from the list
+        ActiveEnemyFire = ActiveEnemyFire.filter(bullet => !bullet.isDeleted())
     for (let particle of ExplosionParticles) {
         if (particle.isTouchingEdge()) {
             particle.change(LedSpriteProperty.Brightness, -60)
