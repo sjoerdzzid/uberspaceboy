@@ -11,15 +11,15 @@ let soundOn = false;
 let ExplosionParticles: game.LedSprite[] = [];
 let ActiveEnemyFire: game.LedSprite[] = [];
 let temp_pos = 0;
-ActiveEnemyFire = [];
-ExplosionParticles = [];
 let score = 0;
 let menuSpeed = 100;
 let gameSpeed = 100;
 let enemySpeed = 200;
 let enemyFireSpeed = 3500;
 let garbageCollectorSpeed = 3000;
-soundOn = true;
+let introActive = true;
+ActiveEnemyFire = [];
+ExplosionParticles = [];
 ExplosionParticleDirections = [-135, 135, 45, -45];
 startIntro();
 
@@ -46,10 +46,6 @@ function UpdateSpace() {
     if (enemyBullet.isTouching(Spaceship)) {
       game.removeLife(0);
       enemyBullet.delete();
-      music.play(
-        music.builtinPlayableSoundEffect(soundExpression.sad),
-        music.PlaybackMode.InBackground
-      );
       ActiveEnemyFire.splice(ActiveEnemyFire.indexOf(enemyBullet), 1)
     }
     if (enemyBullet.get(LedSpriteProperty.Y) == 4) {
@@ -190,14 +186,6 @@ function confirmMenu() {
   }
 }
 
-input.onButtonPressed(Button.AB, function () {
-  if (menuActive) {
-    confirmMenu();
-  } else {
-    SpaceShipFire();
-  }
-});
-
 input.onButtonPressed(Button.B, function () {
   if (menuActive) {
     navigateMenu(1);
@@ -205,6 +193,16 @@ input.onButtonPressed(Button.B, function () {
     Spaceship.change(LedSpriteProperty.X, 1);
   }
 });
+
+input.onButtonPressed(Button.AB, function () {
+    if (introActive) {
+        introActive = false
+    } else if (menuActive) {
+        confirmMenu()
+    } else {
+        SpaceShipFire()
+    }
+})
 
 function initMenu() {
   menuActive = true;
@@ -517,5 +515,6 @@ function introTrailer() {
         # # # # #
         # . # . #
         `);
+    introActive = false;
     initMenu();
 }
