@@ -408,6 +408,12 @@ function introTrailer () {
 function startIntro () {
     introTrailer()
 }
+function sounds () {
+    music.play(music.stringPlayable("B A A B D C D E ", 200), music.PlaybackMode.LoopingInBackground)
+    music.play(music.createSoundExpression(WaveShape.Square, 1757, 0, 255, 0, 500, SoundExpressionEffect.None, InterpolationCurve.Linear), music.PlaybackMode.UntilDone)
+    music.play(music.createSoundExpression(WaveShape.Noise, 1757, 0, 255, 0, 500, SoundExpressionEffect.None, InterpolationCurve.Linear), music.PlaybackMode.UntilDone)
+    music.stopAllSounds()
+}
 input.onButtonPressed(Button.AB, function () {
     if (introActive) {
         introActive = false
@@ -444,6 +450,9 @@ function navigateMenu (direction: number) {
     }
     showMenuItem(MenuItems[menuIndex])
 }
+input.onLogoEvent(TouchButtonEvent.Pressed, function () {
+    sounds()
+})
 function EnemyFire () {
     ActiveEnemyFire.push(game.createSprite(SpaceDestroyer.get(LedSpriteProperty.X), SpaceDestroyer.get(LedSpriteProperty.Y) + 1))
 }
@@ -470,6 +479,7 @@ let garbageCollectorSpeed = 3000
 introActive = true
 ActiveEnemyFire = []
 ExplosionParticles = []
+music.setBuiltInSpeakerEnabled(true)
 ExplosionParticleDirections = [
 -135,
 135,
