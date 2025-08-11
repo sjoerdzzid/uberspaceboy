@@ -409,8 +409,12 @@ function startIntro () {
     introTrailer()
 }
 function sounds () {
+    music.play(music.createSoundExpression(WaveShape.Square, 1, 3597, 255, 0, 500, SoundExpressionEffect.None, InterpolationCurve.Linear), music.PlaybackMode.UntilDone)
+    music.play(music.createSoundExpression(WaveShape.Sawtooth, 411, 136, 255, 255, 100, SoundExpressionEffect.Tremolo, InterpolationCurve.Logarithmic), music.PlaybackMode.UntilDone)
     music.play(music.stringPlayable("B A A B D C D E ", 200), music.PlaybackMode.LoopingInBackground)
+    music.play(music.stringPlayable("B A G F - - - - ", 150), music.PlaybackMode.UntilDone)
     music.play(music.createSoundExpression(WaveShape.Square, 1757, 0, 255, 0, 500, SoundExpressionEffect.None, InterpolationCurve.Linear), music.PlaybackMode.UntilDone)
+    music.play(music.createSoundExpression(WaveShape.Sawtooth, 5000, 1317, 255, 16, 200, SoundExpressionEffect.Tremolo, InterpolationCurve.Logarithmic), music.PlaybackMode.UntilDone)
     music.play(music.createSoundExpression(WaveShape.Noise, 1757, 0, 255, 0, 500, SoundExpressionEffect.None, InterpolationCurve.Linear), music.PlaybackMode.UntilDone)
     music.stopAllSounds()
 }
