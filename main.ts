@@ -1,8 +1,3 @@
-/**
- * loops.everyInterval(menuSpeed, function () {
- * 
- * })
- */
 function UpdateSpace () {
     for (let bullet of ActiveBullets) {
         if (bullet.get(LedSpriteProperty.Y) > 0) {
@@ -20,8 +15,9 @@ function UpdateSpace () {
             enemyBullet.change(LedSpriteProperty.Y, 1)
         }
         if (enemyBullet.isTouching(Spaceship)) {
-            game.removeLife(0)
+            game.removeLife(1)
             enemyBullet.delete()
+            PlaySound("SPACEBOY_HIT")
             ActiveEnemyFire.splice(ActiveEnemyFire.indexOf(enemyBullet), 1)
         }
         if (enemyBullet.get(LedSpriteProperty.Y) == 4) {
@@ -41,6 +37,7 @@ enemyBullet.delete()
     }
 }
 function showMenuItem (item: string) {
+    music.stopAllSounds()
     if (item == "START") {
         basic.showLeds(`
             . . . . .
@@ -49,8 +46,10 @@ function showMenuItem (item: string) {
             # # # # #
             # . # . #
             `)
+        PlaySound("MENU_CLICK")
     }
     if (item == "SOUND") {
+        PlaySound("MENU_CLICK")
         if (soundOn) {
             basic.showLeds(`
                 . . # . .
@@ -70,6 +69,7 @@ function showMenuItem (item: string) {
         }
     }
     if (item == "SPEED") {
+        PlaySound("MENU_CLICK")
         basic.showLeds(`
             . # . # .
             # # # # #
@@ -81,6 +81,7 @@ function showMenuItem (item: string) {
 }
 function SpaceShipFire () {
     ActiveBullets.push(game.createSprite(Spaceship.get(LedSpriteProperty.X), Spaceship.get(LedSpriteProperty.Y) - 1))
+    PlaySound("SPACEBOY_FIRE")
 }
 function EnemyExplode () {
     for (let direction of ExplosionParticleDirections) {
@@ -90,11 +91,32 @@ function EnemyExplode () {
     }
     SpaceDestroyer.delete()
     score += 1
+    PlaySound("ENEMY_EXPLODE")
     spawnSpaceDestroyer()
 }
 function PlaySound (sound: string) {
     if (soundOn) {
-    	
+        if (sound == "SPACEBOY_FIRE") {
+            music.play(music.createSoundExpression(WaveShape.Sawtooth, 5000, 1317, 255, 16, 200, SoundExpressionEffect.None, InterpolationCurve.Logarithmic), music.PlaybackMode.UntilDone)
+        }
+        if (sound == "SPACEBOY_HIT") {
+            music.play(music.createSoundExpression(WaveShape.Sawtooth, 606, 217, 255, 255, 200, SoundExpressionEffect.None, InterpolationCurve.Logarithmic), music.PlaybackMode.UntilDone)
+        }
+        if (sound == "ENEMY_FIRE") {
+            music.play(music.createSoundExpression(WaveShape.Noise, 1757, 0, 255, 0, 500, SoundExpressionEffect.None, InterpolationCurve.Linear), music.PlaybackMode.UntilDone)
+        }
+        if (sound == "ENEMY_EXPLODE") {
+            music.play(music.createSoundExpression(WaveShape.Noise, 579, 551, 212, 111, 100, SoundExpressionEffect.None, InterpolationCurve.Linear), music.PlaybackMode.UntilDone)
+        }
+        if (sound == "MENU_CLICK") {
+            music.play(music.createSoundExpression(WaveShape.Square, 2530, 2530, 131, 16, 100, SoundExpressionEffect.None, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
+        }
+        if (sound == "SOUND_ON") {
+            music.play(music.createSoundExpression(WaveShape.Sine, 1831, 3139, 215, 120, 100, SoundExpressionEffect.None, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
+        }
+        if (sound == "SOUND_OFF") {
+            music.play(music.createSoundExpression(WaveShape.Sine, 3139, 2193, 167, 145, 100, SoundExpressionEffect.None, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
+        }
     }
 }
 function DeleteGarbage () {
@@ -132,8 +154,10 @@ input.onButtonPressed(Button.A, function () {
 function confirmMenu () {
     if (MenuItems[menuIndex] == "SOUND") {
         if (soundOn) {
+            PlaySound("SOUND_OFF")
             soundOn = false
         } else {
+            PlaySound("SOUND_ON")
             soundOn = true
         }
         showMenuItem("SOUND")
@@ -143,6 +167,9 @@ function confirmMenu () {
     }
 }
 function introTrailer () {
+    if (soundOn) {
+        music.play(music.stringPlayable("B A A B D C D E ", 200), music.PlaybackMode.LoopingInBackground)
+    }
     basic.showLeds(`
         . # . . .
         . . . . .
@@ -405,12 +432,9 @@ function introTrailer () {
     introActive = false
     initMenu()
 }
-function startIntro () {
-    introTrailer()
-}
 input.onButtonPressed(Button.AB, function () {
     if (introActive) {
-        introActive = false
+        music.stopAllSounds()
     } else if (menuActive) {
         confirmMenu()
     } else {
@@ -434,8 +458,8 @@ function initMenu () {
 function spawnSpaceDestroyer () {
     SpaceDestroyer = game.createSprite(randint(0, 4), 0)
 }
-function navigateMenu (direction: number) {
-    menuIndex += direction
+function navigateMenu (direction2: number) {
+    menuIndex += direction2
     if (menuIndex < 0) {
         menuIndex = MenuItems.length - 1
     }
@@ -446,6 +470,7 @@ function navigateMenu (direction: number) {
 }
 function EnemyFire () {
     ActiveEnemyFire.push(game.createSprite(SpaceDestroyer.get(LedSpriteProperty.X), SpaceDestroyer.get(LedSpriteProperty.Y) + 1))
+    PlaySound("ENEMY_FIRE")
 }
 let menuIndex = 0
 let MenuItems: string[] = []
@@ -453,15 +478,17 @@ let gameStarted = false
 let menuActive = false
 let score = 0
 let temp_particle: game.LedSprite = null
-let soundOn = false
 let Spaceship: game.LedSprite = null
 let SpaceDestroyer: game.LedSprite = null
 let ActiveBullets: game.LedSprite[] = []
 let ExplosionParticleDirections: number[] = []
 let ExplosionParticles: game.LedSprite[] = []
 let introActive = false
+let soundOn = false
 let temp_pos = 0
-let ActiveEnemyFire: game.LedSprite[] = []
+let ActiveEnemyFire : game.LedSprite[] = []
+music.setBuiltInSpeakerEnabled(true)
+soundOn = true
 let menuSpeed = 100
 let gameSpeed = 100
 let enemySpeed = 200
@@ -476,7 +503,7 @@ ExplosionParticleDirections = [
 45,
 -45
 ]
-startIntro()
+introTrailer()
 loops.everyInterval(garbageCollectorSpeed, function () {
     DeleteGarbage()
 })
@@ -488,5 +515,11 @@ loops.everyInterval(enemyFireSpeed, function () {
 loops.everyInterval(gameSpeed, function () {
     if (gameStarted) {
         UpdateSpace()
+    }
+})
+basic.forever(function () {
+    if (game.isGameOver()) {
+        basic.showNumber(score)
+        control.reset()
     }
 })
