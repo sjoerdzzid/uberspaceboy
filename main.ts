@@ -20,7 +20,7 @@ function UpdateSpace () {
             enemyBullet.change(LedSpriteProperty.Y, 1)
         }
         if (enemyBullet.isTouching(Spaceship)) {
-            game.removeLife(0)
+            game.removeLife(1)
             enemyBullet.delete()
             ActiveEnemyFire.splice(ActiveEnemyFire.indexOf(enemyBullet), 1)
         }
@@ -502,5 +502,11 @@ loops.everyInterval(enemyFireSpeed, function () {
 loops.everyInterval(gameSpeed, function () {
     if (gameStarted) {
         UpdateSpace()
+    }
+})
+basic.forever(function () {
+    if (game.isGameOver()) {
+        basic.showNumber(score)
+        control.reset()
     }
 })
