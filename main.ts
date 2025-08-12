@@ -8,6 +8,7 @@ function UpdateSpace () {
         }
         if (bullet.isTouching(SpaceDestroyer)) {
             bullet.delete()
+            SpaceDestroyer.delete()
             EnemyExplode()
         }
     }
@@ -85,14 +86,13 @@ function SpaceShipFire () {
     PlaySound("SPACEBOY_FIRE")
 }
 function EnemyExplode () {
-    SpaceDestroyer.delete()
+    PlaySound("ENEMY_EXPLODE")
+    score += 1
     for (let direction of ExplosionParticleDirections) {
         temp_particle = game.createSprite(SpaceDestroyer.get(LedSpriteProperty.X), 0)
         temp_particle.set(LedSpriteProperty.Direction, direction)
         ExplosionParticles.push(temp_particle)
     }
-    score += 1
-    PlaySound("ENEMY_EXPLODE")
     spawnSpaceDestroyer()
 }
 function PlaySound (sound: string) {
@@ -477,8 +477,8 @@ let menuIndex = 0
 let MenuItems: string[] = []
 let gameStarted = false
 let menuActive = false
-let score = 0
 let temp_particle: game.LedSprite = null
+let score = 0
 let Spaceship: game.LedSprite = null
 let SpaceDestroyer: game.LedSprite = null
 let ActiveBullets: game.LedSprite[] = []
