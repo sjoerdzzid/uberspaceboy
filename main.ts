@@ -7,6 +7,7 @@ function UpdateSpace () {
             bullet.change(LedSpriteProperty.Brightness, -60)
         }
         if (bullet.isTouching(SpaceDestroyer)) {
+            bullet.delete()
             EnemyExplode()
         }
     }
@@ -84,12 +85,12 @@ function SpaceShipFire () {
     PlaySound("SPACEBOY_FIRE")
 }
 function EnemyExplode () {
+    SpaceDestroyer.delete()
     for (let direction of ExplosionParticleDirections) {
         temp_particle = game.createSprite(SpaceDestroyer.get(LedSpriteProperty.X), 0)
         temp_particle.set(LedSpriteProperty.Direction, direction)
         ExplosionParticles.push(temp_particle)
     }
-    SpaceDestroyer.delete()
     score += 1
     PlaySound("ENEMY_EXPLODE")
     spawnSpaceDestroyer()
