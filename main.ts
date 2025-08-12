@@ -486,6 +486,7 @@ let ExplosionParticleDirections: number[] = []
 let ExplosionParticles: game.LedSprite[] = []
 let introActive = false
 let soundOn = false
+let Enemy_Better = 0
 let temp_pos = 0
 let ActiveEnemyFire : game.LedSprite[] = []
 music.setBuiltInSpeakerEnabled(true)
@@ -508,8 +509,18 @@ introTrailer()
 loops.everyInterval(garbageCollectorSpeed, function () {
     DeleteGarbage()
 })
+loops.everyInterval(1000, function () {
+    if (Enemy_Better == 2) {
+        EnemyFire()
+    }
+})
 loops.everyInterval(enemyFireSpeed, function () {
     if (gameStarted) {
+        EnemyFire()
+    }
+})
+loops.everyInterval(2000, function () {
+    if (Enemy_Better == 1) {
         EnemyFire()
     }
 })
@@ -519,6 +530,9 @@ loops.everyInterval(gameSpeed, function () {
     }
 })
 basic.forever(function () {
+    if (score == 10) {
+        Enemy_Better += 1
+    }
     if (game.isGameOver()) {
         basic.showNumber(score)
         control.reset()
