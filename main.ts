@@ -18,14 +18,14 @@ function UpdateSpace () {
         }
         if (enemyBullet.isTouching(Spaceship)) {
             game.removeLife(1)
+            ActiveEnemyFire.removeAt(ActiveEnemyFire.indexOf(enemyBullet))
             enemyBullet.delete()
             PlaySound("SPACEBOY_HIT")
-            ActiveEnemyFire.splice(ActiveEnemyFire.indexOf(enemyBullet), 1)
         }
         if (enemyBullet.get(LedSpriteProperty.Y) == 4) {
             basic.pause(100)
-            ActiveEnemyFire.splice(ActiveEnemyFire.indexOf(enemyBullet), 1)
-enemyBullet.delete()
+            ActiveEnemyFire.removeAt(ActiveEnemyFire.indexOf(enemyBullet))
+            enemyBullet.delete()
         }
     }
     for (let particle of ExplosionParticles) {
@@ -484,10 +484,10 @@ let SpaceDestroyer: game.LedSprite = null
 let ActiveBullets: game.LedSprite[] = []
 let ExplosionParticleDirections: number[] = []
 let ExplosionParticles: game.LedSprite[] = []
+let ActiveEnemyFire: game.LedSprite[] = []
 let introActive = false
 let soundOn = false
 let temp_pos = 0
-let ActiveEnemyFire : game.LedSprite[] = []
 music.setBuiltInSpeakerEnabled(true)
 soundOn = true
 let menuSpeed = 100
