@@ -143,6 +143,7 @@ function startGame () {
     Spaceship = game.createSprite(2, 4)
     spawnSpaceDestroyer()
     gameStarted = true
+    spacedestroyermove = 1
 }
 input.onButtonPressed(Button.A, function () {
     if (menuActive) {
@@ -474,6 +475,7 @@ function EnemyFire () {
 }
 let menuIndex = 0
 let MenuItems: string[] = []
+let spacedestroyermove = 0
 let gameStarted = false
 let menuActive = false
 let score = 0
@@ -507,6 +509,11 @@ ExplosionParticleDirections = [
 introTrailer()
 loops.everyInterval(garbageCollectorSpeed, function () {
     DeleteGarbage()
+})
+loops.everyInterval(4000, function () {
+    if (spacedestroyermove) {
+        SpaceDestroyer.change(LedSpriteProperty.X, randint(0, 4))
+    }
 })
 loops.everyInterval(1000, function () {
     if (Enemy_Better == 2) {
