@@ -1,3 +1,272 @@
+function createIntroImages () {
+    introSprites.push(images.createImage(`
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        `))
+    introSprites.push(images.createImage(`
+        . # . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        . . # . .
+        `))
+    introSprites.push(images.createImage(`
+        . # . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        . # . . .
+        `))
+    introSprites.push(images.createImage(`
+        . # . . .
+        . . . . .
+        . . . . .
+        . # . . .
+        . # . . .
+        `))
+    introSprites.push(images.createImage(`
+        . # . . .
+        . . . . .
+        . # . . .
+        . . . . .
+        . # . . .
+        `))
+    introSprites.push(images.createImage(`
+        . # . . .
+        . # . . .
+        . . . . .
+        . . . . .
+        . # . . .
+        `))
+    introSprites.push(images.createImage(`
+        . # # . .
+        . . # . .
+        . . . . .
+        . . . . .
+        . # . . .
+        `))
+    introSprites.push(images.createImage(`
+        . . # # .
+        . . # . .
+        . . . # .
+        . . . . .
+        . # . . .
+        `))
+    introSprites.push(images.createImage(`
+        # . . # #
+        . . . . .
+        . . . # .
+        . . . . #
+        . # . . .
+        `))
+    introSprites.push(images.createImage(`
+        # . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        # . . . .
+        `))
+    introSprites.push(images.createImage(`
+        # . . . .
+        . . . . .
+        . . . . .
+        # . . . .
+        # . . . .
+        `))
+    introSprites.push(images.createImage(`
+        # . . . .
+        . . . . .
+        # . . . .
+        . . . . .
+        # . . . .
+        `))
+    introSprites.push(images.createImage(`
+        # . . . .
+        # . . . .
+        . . . . .
+        . . . . .
+        # . . . .
+        `))
+    introSprites.push(images.createImage(`
+        # # . . .
+        . # . . .
+        . . . . .
+        . . . . .
+        # . . . .
+        `))
+    introSprites.push(images.createImage(`
+        . # # . .
+        . # . . .
+        . . # . .
+        . . . . .
+        # . . . .
+        `))
+    introSprites.push(images.createImage(`
+        . # # # .
+        . # . . .
+        . . # . .
+        . . . # .
+        # . . . .
+        `))
+    introSprites.push(images.createImage(`
+        . . # # #
+        . . . . .
+        . . # . .
+        . . . # .
+        # . . . #
+        `))
+    introSprites.push(images.createImage(`
+        . . . . #
+        . . . . .
+        . . . . .
+        . . . . .
+        . # . . .
+        `))
+    introSprites.push(images.createImage(`
+        . . . . #
+        . . . . .
+        . . . . .
+        . . . . .
+        . . # . .
+        `))
+    introSprites.push(images.createImage(`
+        . . . . #
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . # .
+        `))
+    introSprites.push(images.createImage(`
+        . . . . #
+        . . . . #
+        . . . . .
+        . . . . .
+        . . . . #
+        `))
+    introSprites.push(images.createImage(`
+        . . . . #
+        . . . . .
+        . . . . #
+        . . . . .
+        . . . . #
+        `))
+    introSprites.push(images.createImage(`
+        . . . . #
+        . . . . .
+        . . . . .
+        . . . . #
+        . . . . #
+        `))
+    introSprites.push(images.createImage(`
+        . . . . #
+        . . . . .
+        . . # . .
+        . . . # .
+        . . # # #
+        `))
+    introSprites.push(images.createImage(`
+        . . . . #
+        . # . . .
+        . . # . #
+        . . . # #
+        . . # # #
+        `))
+    introSprites.push(images.createImage(`
+        . . . . #
+        . # . # #
+        . . # # #
+        . . # # #
+        . # # # #
+        `))
+    introSprites.push(images.createImage(`
+        # . # # #
+        . # # # #
+        . # # # #
+        . # # # #
+        # # # # #
+        `))
+    introSprites.push(images.createImage(`
+        # # # # #
+        . # # # #
+        # # # # #
+        # # # # #
+        # # # # #
+        `))
+    introSprites.push(images.createImage(`
+        # # # # #
+        # # # # #
+        # # # # #
+        # # # # #
+        # # # # #
+        `))
+    introSprites.push(images.createImage(`
+        # # # # #
+        # # # # #
+        # # # # #
+        # # # # #
+        # . # . #
+        `))
+    introSprites.push(images.createImage(`
+        # # # # #
+        # # # # #
+        # # # # #
+        # . # . #
+        . . . . .
+        `))
+    introSprites.push(images.createImage(`
+        # # # # #
+        # # # # #
+        . # . # .
+        . . . . .
+        . . . . .
+        `))
+    introSprites.push(images.createImage(`
+        # # # # #
+        # . # . #
+        . . . . .
+        . . . . .
+        . . . . .
+        `))
+    introSprites.push(images.createImage(`
+        . # . # .
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        `))
+    introSprites.push(images.createImage(`
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        . . # . .
+        `))
+    introSprites.push(images.createImage(`
+        . . . . .
+        . . . . .
+        . . . . .
+        . . # . .
+        . # # # .
+        `))
+    introSprites.push(images.createImage(`
+        . . . . .
+        . . . . .
+        . . # . .
+        . # # # .
+        # # # # #
+        `))
+    introSprites.push(images.createImage(`
+        . . . . .
+        . . # . .
+        . # # # .
+        # # # # #
+        # . # . #
+        `))
+    introTrailer()
+}
 function UpdateSpace () {
     for (let bullet of ActiveBullets) {
         if (bullet.get(LedSpriteProperty.Y) > 0) {
@@ -41,44 +310,41 @@ function UpdateSpace () {
 function showMenuItem (item: string) {
     music.stopAllSounds()
     if (item == "START") {
-        basic.showLeds(`
+        images.createImage(`
             . . . . .
             . . # . .
             . # # # .
             # # # # #
             # . # . #
-            `)
-        PlaySound("MENU_CLICK")
+            `).showImage(0)
     }
     if (item == "SOUND") {
-        PlaySound("MENU_CLICK")
         if (soundOn) {
-            basic.showLeds(`
+            images.createImage(`
                 . . # . .
                 . # # # .
                 . # # # .
                 # # # # #
                 . . # . .
-                `)
+                `).showImage(0)
         } else {
-            basic.showLeds(`
+            images.createImage(`
                 . . # . #
                 . # # # .
                 . # # . .
                 . # . # #
                 # . # . .
-                `)
+                `).showImage(0)
         }
     }
     if (item == "SPEED") {
-        PlaySound("MENU_CLICK")
-        basic.showLeds(`
+        images.createImage(`
             . # . # .
             # # # # #
             . # . # .
             # # # # #
             . # . # .
-            `)
+            `).showImage(0)
     }
 }
 function SpaceShipFire () {
@@ -110,7 +376,7 @@ function PlaySound (sound: string) {
             music.play(music.createSoundExpression(WaveShape.Noise, 579, 551, 212, 111, 100, SoundExpressionEffect.None, InterpolationCurve.Linear), music.PlaybackMode.UntilDone)
         }
         if (sound == "MENU_CLICK") {
-            music.play(music.createSoundExpression(WaveShape.Square, 2530, 2530, 131, 16, 100, SoundExpressionEffect.None, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
+            music.play(music.createSoundExpression(WaveShape.Noise, 578, 522, 131, 0, 50, SoundExpressionEffect.None, InterpolationCurve.Logarithmic), music.PlaybackMode.UntilDone)
         }
         if (sound == "SOUND_ON") {
             music.play(music.createSoundExpression(WaveShape.Sine, 1831, 3139, 215, 120, 100, SoundExpressionEffect.None, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
@@ -142,12 +408,12 @@ function startGame () {
     menuActive = false
     game.setLife(5)
     Spaceship = game.createSprite(2, 4)
-    spacedestroyermove = true
     spawnSpaceDestroyer()
     gameStarted = true
 }
 input.onButtonPressed(Button.A, function () {
     if (menuActive) {
+        PlaySound("MENU_CLICK")
         navigateMenu(-1)
     } else {
         Spaceship.change(LedSpriteProperty.X, -1)
@@ -169,268 +435,13 @@ function confirmMenu () {
     }
 }
 function introTrailer () {
+    introActive = true
     if (soundOn) {
         music.play(music.stringPlayable("B A A B D C D E ", 200), music.PlaybackMode.LoopingInBackground)
     }
-    basic.showLeds(`
-        . # . . .
-        . . . . .
-        . . . . .
-        . . . . .
-        . . # . .
-        `)
-    basic.showLeds(`
-        . # . . .
-        . . . . .
-        . . . . .
-        . . . . .
-        . # . . .
-        `)
-    basic.showLeds(`
-        . # . . .
-        . . . . .
-        . . . . .
-        . # . . .
-        . # . . .
-        `)
-    basic.showLeds(`
-        . # . . .
-        . . . . .
-        . # . . .
-        . . . . .
-        . # . . .
-        `)
-    basic.showLeds(`
-        . # . . .
-        . # . . .
-        . . . . .
-        . . . . .
-        . # . . .
-        `)
-    basic.showLeds(`
-        . # # . .
-        . . # . .
-        . . . . .
-        . . . . .
-        . # . . .
-        `)
-    basic.showLeds(`
-        . . # # .
-        . . # . .
-        . . . # .
-        . . . . .
-        . # . . .
-        `)
-    basic.showLeds(`
-        # . . # #
-        . . . . .
-        . . . # .
-        . . . . #
-        . # . . .
-        `)
-    basic.showLeds(`
-        # . . . .
-        . . . . .
-        . . . . .
-        . . . . .
-        # . . . .
-        `)
-    basic.showLeds(`
-        # . . . .
-        . . . . .
-        . . . . .
-        # . . . .
-        # . . . .
-        `)
-    basic.showLeds(`
-        # . . . .
-        . . . . .
-        # . . . .
-        . . . . .
-        # . . . .
-        `)
-    basic.showLeds(`
-        # . . . .
-        # . . . .
-        . . . . .
-        . . . . .
-        # . . . .
-        `)
-    basic.showLeds(`
-        # # . . .
-        . # . . .
-        . . . . .
-        . . . . .
-        # . . . .
-        `)
-    basic.showLeds(`
-        . # # . .
-        . # . . .
-        . . # . .
-        . . . . .
-        # . . . .
-        `)
-    basic.showLeds(`
-        . # # # .
-        . # . . .
-        . . # . .
-        . . . # .
-        # . . . .
-        `)
-    basic.showLeds(`
-        . . # # #
-        . . . . .
-        . . # . .
-        . . . # .
-        # . . . #
-        `)
-    basic.showLeds(`
-        . . . . #
-        . . . . .
-        . . . . .
-        . . . . .
-        . # . . .
-        `)
-    basic.showLeds(`
-        . . . . #
-        . . . . .
-        . . . . .
-        . . . . .
-        . . # . .
-        `)
-    basic.showLeds(`
-        . . . . #
-        . . . . .
-        . . . . .
-        . . . . .
-        . . . # .
-        `)
-    basic.showLeds(`
-        . . . . #
-        . . . . #
-        . . . . .
-        . . . . .
-        . . . . #
-        `)
-    basic.showLeds(`
-        . . . . #
-        . . . . .
-        . . . . #
-        . . . . .
-        . . . . #
-        `)
-    basic.showLeds(`
-        . . . . #
-        . . . . .
-        . . . . .
-        . . . . #
-        . . . . #
-        `)
-    basic.showLeds(`
-        . . . . #
-        . . . . .
-        . . # . .
-        . . . # .
-        . . # # #
-        `)
-    basic.showLeds(`
-        . . . . #
-        . # . . .
-        . . # . #
-        . . . # #
-        . . # # #
-        `)
-    basic.showLeds(`
-        . . . . #
-        . # . # #
-        . . # # #
-        . . # # #
-        . # # # #
-        `)
-    basic.showLeds(`
-        # . # # #
-        . # # # #
-        . # # # #
-        . # # # #
-        # # # # #
-        `)
-    basic.showLeds(`
-        # # # # #
-        . # # # #
-        # # # # #
-        # # # # #
-        # # # # #
-        `)
-    basic.showLeds(`
-        # # # # #
-        # # # # #
-        # # # # #
-        # # # # #
-        # # # # #
-        `)
-    basic.showLeds(`
-        # # # # #
-        # # # # #
-        # # # # #
-        # # # # #
-        # . # . #
-        `)
-    basic.showLeds(`
-        # # # # #
-        # # # # #
-        # # # # #
-        # . # . #
-        . . . . .
-        `)
-    basic.showLeds(`
-        # # # # #
-        # # # # #
-        . # . # .
-        . . . . .
-        . . . . .
-        `)
-    basic.showLeds(`
-        # # # # #
-        # . # . #
-        . . . . .
-        . . . . .
-        . . . . .
-        `)
-    basic.showLeds(`
-        . # . # .
-        . . . . .
-        . . . . .
-        . . . . .
-        . . . . .
-        `)
-    basic.showLeds(`
-        . . . . .
-        . . . . .
-        . . . . .
-        . . . . .
-        . . # . .
-        `)
-    basic.showLeds(`
-        . . . . .
-        . . . . .
-        . . . . .
-        . . # . .
-        . # # # .
-        `)
-    basic.showLeds(`
-        . . . . .
-        . . . . .
-        . . # . .
-        . # # # .
-        # # # # #
-        `)
-    basic.showLeds(`
-        . . . . .
-        . . # . .
-        . # # # .
-        # # # # #
-        # . # . #
-        `)
+    for (let introSprite of introSprites) {
+        introSprite.showImage(0, 150)
+    }
     introActive = false
     initMenu()
 }
@@ -445,6 +456,7 @@ input.onButtonPressed(Button.AB, function () {
 })
 input.onButtonPressed(Button.B, function () {
     if (menuActive) {
+        PlaySound("MENU_CLICK")
         navigateMenu(1)
     } else {
         Spaceship.change(LedSpriteProperty.X, 1)
@@ -459,6 +471,7 @@ function initMenu () {
 }
 function spawnSpaceDestroyer () {
     SpaceDestroyer = game.createSprite(randint(0, 4), 0)
+    enemyActive = true
 }
 function navigateMenu (direction2: number) {
     menuIndex += direction2
@@ -474,28 +487,31 @@ function EnemyFire () {
     ActiveEnemyFire.push(game.createSprite(SpaceDestroyer.get(LedSpriteProperty.X), SpaceDestroyer.get(LedSpriteProperty.Y) + 1))
     PlaySound("ENEMY_FIRE")
 }
+let enemyActive = false
 let menuIndex = 0
 let MenuItems: string[] = []
 let gameStarted = false
-let spacedestroyermove = false
 let menuActive = false
 let temp_particle: game.LedSprite = null
 let score = 0
 let Spaceship: game.LedSprite = null
 let SpaceDestroyer: game.LedSprite = null
 let ActiveBullets: game.LedSprite[] = []
+let introSprites: Image[] = []
 let ExplosionParticleDirections: number[] = []
 let ExplosionParticles: game.LedSprite[] = []
 let ActiveEnemyFire: game.LedSprite[] = []
 let introActive = false
 let soundOn = false
+let enemyActionSpeed = 0
 let temp_pos = 0
 music.setBuiltInSpeakerEnabled(true)
+let enemyLocation = randint(0, 4)
+let enemySpeed = 200
+let enemyFireSpeed = 3500
 soundOn = true
 let menuSpeed = 100
 let gameSpeed = 100
-let enemySpeed = 200
-let enemyFireSpeed = 3500
 let garbageCollectorSpeed = 3000
 introActive = true
 ActiveEnemyFire = []
@@ -506,13 +522,13 @@ ExplosionParticleDirections = [
 45,
 -45
 ]
-introTrailer()
+createIntroImages()
 loops.everyInterval(garbageCollectorSpeed, function () {
     DeleteGarbage()
 })
 loops.everyInterval(4000, function () {
-    if (spacedestroyermove) {
-        SpaceDestroyer.change(LedSpriteProperty.X, randint(0, 4))
+    if (enemyActive) {
+        enemyLocation = randint(0, 4)
     }
 })
 loops.everyInterval(enemyFireSpeed, function () {
@@ -528,6 +544,17 @@ loops.everyInterval(gameSpeed, function () {
 basic.forever(function () {
     if (game.isGameOver()) {
         basic.showNumber(score)
+        basic.pause(2000)
         control.reset()
+    }
+})
+loops.everyInterval(enemySpeed, function () {
+    if (enemyActive) {
+        if (enemyLocation < SpaceDestroyer.get(LedSpriteProperty.X)) {
+            SpaceDestroyer.change(LedSpriteProperty.X, -1)
+        }
+        if (enemyLocation > SpaceDestroyer.get(LedSpriteProperty.X)) {
+            SpaceDestroyer.change(LedSpriteProperty.X, 1)
+        }
     }
 })
