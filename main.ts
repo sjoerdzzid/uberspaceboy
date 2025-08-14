@@ -661,14 +661,6 @@ function startGame() {
   spawnSpaceDestroyer();
   gameStarted = true;
 }
-input.onButtonPressed(Button.A, function () {
-  if (menuActive) {
-    PlaySound("MENU_CLICK");
-    navigateMenu(-1);
-  } else {
-    Spaceship.change(LedSpriteProperty.X, -1);
-  }
-});
 function confirmMenu() {
   if (MenuItems[menuIndex] == "SOUND") {
     if (soundOn) {
@@ -703,7 +695,7 @@ input.onButtonPressed(Button.AB, function () {
     music.stopAllSounds();
   } else if (menuActive) {
     confirmMenu();
-  } else {
+  } else if (gameStarted) {
     SpaceShipFire();
   }
 });
@@ -711,8 +703,16 @@ input.onButtonPressed(Button.B, function () {
   if (menuActive) {
     PlaySound("MENU_CLICK");
     navigateMenu(1);
-  } else {
+  } else if (gameStarted) {
     Spaceship.change(LedSpriteProperty.X, 1);
+  }
+});
+input.onButtonPressed(Button.A, function () {
+  if (menuActive) {
+    PlaySound("MENU_CLICK");
+    navigateMenu(-1);
+  } else if (gameStarted) {
+    Spaceship.change(LedSpriteProperty.X, -1);
   }
 });
 function initMenu() {
@@ -783,10 +783,14 @@ ExplosionParticles = [];
 SpaceDestroyerExplosion = [];
 SpaceDestroyerHalo = [];
 ExplosionParticleDirections = [-135, 135, 45, -45];
+// Levels array with speed settings?
+let levels = [];
 createIntroImages();
+
 loops.everyInterval(garbageCollectorSpeed, function () {
   DeleteGarbage();
 });
+
 loops.everyInterval(4000, function () {
   if (enemyActive) {
     enemyLocation = randint(0, 4);
@@ -804,6 +808,9 @@ loops.everyInterval(gameSpeed, function () {
 });
 basic.forever(function () {
   if (game.isGameOver()) {
+    gameStarted = false;
+    menuActive = false;
+    basic.showString("Score:");
     basic.showNumber(score);
     basic.pause(2000);
     control.reset();
