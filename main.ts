@@ -1,526 +1,828 @@
-function UpdateSpace () {
-    for (let bullet of ActiveBullets) {
-        if (bullet.get(LedSpriteProperty.Y) > 0) {
-            bullet.change(LedSpriteProperty.Y, -1)
-            bullet.change(LedSpriteProperty.Brightness, -30)
-        } else {
-            bullet.change(LedSpriteProperty.Brightness, -60)
-        }
-        if (bullet.isTouching(SpaceDestroyer)) {
-            bullet.delete()
-            EnemyExplode()
-        }
-    }
-    for (let enemyBullet of ActiveEnemyFire) {
-        if (enemyBullet.get(LedSpriteProperty.Y) <= 5) {
-            enemyBullet.change(LedSpriteProperty.Y, 1)
-        }
-        if (enemyBullet.isTouching(Spaceship)) {
-            game.removeLife(1)
-            enemyBullet.delete()
-            PlaySound("SPACEBOY_HIT")
-            ActiveEnemyFire.splice(ActiveEnemyFire.indexOf(enemyBullet), 1)
-        }
-        if (enemyBullet.get(LedSpriteProperty.Y) == 4) {
-            basic.pause(100)
-            ActiveEnemyFire.splice(ActiveEnemyFire.indexOf(enemyBullet), 1)
-enemyBullet.delete()
-        }
-    }
-    for (let particle of ExplosionParticles) {
-        if (particle.isTouchingEdge()) {
-            particle.change(LedSpriteProperty.Brightness, -60)
-            particle.move(1)
-        } else {
-            particle.move(1)
-            particle.set(LedSpriteProperty.Brightness, randint(75, 255))
-        }
-    }
-}
-function showMenuItem (item: string) {
-    music.stopAllSounds()
-    if (item == "START") {
-        basic.showLeds(`
-            . . . . .
-            . . # . .
-            . # # # .
-            # # # # #
-            # . # . #
-            `)
-        PlaySound("MENU_CLICK")
-    }
-    if (item == "SOUND") {
-        PlaySound("MENU_CLICK")
-        if (soundOn) {
-            basic.showLeds(`
-                . . # . .
-                . # # # .
-                . # # # .
-                # # # # #
-                . . # . .
-                `)
-        } else {
-            basic.showLeds(`
-                . . # . #
-                . # # # .
-                . # # . .
-                . # . # #
-                # . # . .
-                `)
-        }
-    }
-    if (item == "SPEED") {
-        PlaySound("MENU_CLICK")
-        basic.showLeds(`
-            . # . # .
-            # # # # #
-            . # . # .
-            # # # # #
-            . # . # .
-            `)
-    }
-}
-function SpaceShipFire () {
-    ActiveBullets.push(game.createSprite(Spaceship.get(LedSpriteProperty.X), Spaceship.get(LedSpriteProperty.Y) - 1))
-    PlaySound("SPACEBOY_FIRE")
-}
-function EnemyExplode () {
-    SpaceDestroyer.delete()
-    for (let direction of ExplosionParticleDirections) {
-        temp_particle = game.createSprite(SpaceDestroyer.get(LedSpriteProperty.X), 0)
-        temp_particle.set(LedSpriteProperty.Direction, direction)
-        ExplosionParticles.push(temp_particle)
-    }
-    score += 1
-    PlaySound("ENEMY_EXPLODE")
-    spawnSpaceDestroyer()
-}
-function PlaySound (sound: string) {
-    if (soundOn) {
-        if (sound == "SPACEBOY_FIRE") {
-            music.play(music.createSoundExpression(WaveShape.Sawtooth, 5000, 1317, 255, 16, 200, SoundExpressionEffect.None, InterpolationCurve.Logarithmic), music.PlaybackMode.UntilDone)
-        }
-        if (sound == "SPACEBOY_HIT") {
-            music.play(music.createSoundExpression(WaveShape.Sawtooth, 606, 217, 255, 255, 200, SoundExpressionEffect.None, InterpolationCurve.Logarithmic), music.PlaybackMode.UntilDone)
-        }
-        if (sound == "ENEMY_FIRE") {
-            music.play(music.createSoundExpression(WaveShape.Noise, 1757, 0, 255, 0, 500, SoundExpressionEffect.None, InterpolationCurve.Linear), music.PlaybackMode.UntilDone)
-        }
-        if (sound == "ENEMY_EXPLODE") {
-            music.play(music.createSoundExpression(WaveShape.Noise, 579, 551, 212, 111, 100, SoundExpressionEffect.None, InterpolationCurve.Linear), music.PlaybackMode.UntilDone)
-        }
-        if (sound == "MENU_CLICK") {
-            music.play(music.createSoundExpression(WaveShape.Square, 2530, 2530, 131, 16, 100, SoundExpressionEffect.None, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
-        }
-        if (sound == "SOUND_ON") {
-            music.play(music.createSoundExpression(WaveShape.Sine, 1831, 3139, 215, 120, 100, SoundExpressionEffect.None, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
-        }
-        if (sound == "SOUND_OFF") {
-            music.play(music.createSoundExpression(WaveShape.Sine, 3139, 2193, 167, 145, 100, SoundExpressionEffect.None, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
-        }
-    }
-}
-function DeleteGarbage () {
-    for (let finished_bullet of ActiveBullets) {
-        if (finished_bullet.get(LedSpriteProperty.Y) == 0 && finished_bullet.get(LedSpriteProperty.Brightness) == 0) {
-            finished_bullet.delete()
-            if (finished_bullet.isDeleted()) {
-                ActiveBullets.shift()
-            }
-        }
-    }
-    for (let finished_particle of ExplosionParticles) {
-        if (finished_particle.get(LedSpriteProperty.Y) <= 4 && finished_particle.get(LedSpriteProperty.Brightness) == 0) {
-            finished_particle.delete()
-            if (finished_particle.isDeleted()) {
-                ExplosionParticles.shift()
-            }
-        }
-    }
-}
-function startGame () {
-    menuActive = false
-    game.setLife(5)
-    Spaceship = game.createSprite(2, 4)
-    spawnSpaceDestroyer()
-    gameStarted = true
-}
-input.onButtonPressed(Button.A, function () {
-    if (menuActive) {
-        navigateMenu(-1)
-    } else {
-        Spaceship.change(LedSpriteProperty.X, -1)
-    }
-})
-function confirmMenu () {
-    if (MenuItems[menuIndex] == "SOUND") {
-        if (soundOn) {
-            PlaySound("SOUND_OFF")
-            soundOn = false
-        } else {
-            PlaySound("SOUND_ON")
-            soundOn = true
-        }
-        showMenuItem("SOUND")
-    }
-    if (MenuItems[menuIndex] == "START") {
-        startGame()
-    }
-}
-function introTrailer () {
-    if (soundOn) {
-        music.play(music.stringPlayable("B A A B D C D E ", 200), music.PlaybackMode.LoopingInBackground)
-    }
-    basic.showLeds(`
+function createIntroImages() {
+  introSprites.push(
+    images.createImage(`
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        `)
+  );
+  introSprites.push(
+    images.createImage(`
         . # . . .
         . . . . .
         . . . . .
         . . . . .
         . . # . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . # . . .
         . . . . .
         . . . . .
         . . . . .
         . # . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . # . . .
         . . . . .
         . . . . .
         . # . . .
         . # . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . # . . .
         . . . . .
         . # . . .
         . . . . .
         . # . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . # . . .
         . # . . .
         . . . . .
         . . . . .
         . # . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . # # . .
         . . # . .
         . . . . .
         . . . . .
         . # . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . . # # .
         . . # . .
         . . . # .
         . . . . .
         . # . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         # . . # #
         . . . . .
         . . . # .
         . . . . #
         . # . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         # . . . .
         . . . . .
         . . . . .
         . . . . .
         # . . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         # . . . .
         . . . . .
         . . . . .
         # . . . .
         # . . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         # . . . .
         . . . . .
         # . . . .
         . . . . .
         # . . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         # . . . .
         # . . . .
         . . . . .
         . . . . .
         # . . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         # # . . .
         . # . . .
         . . . . .
         . . . . .
         # . . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . # # . .
         . # . . .
         . . # . .
         . . . . .
         # . . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . # # # .
         . # . . .
         . . # . .
         . . . # .
         # . . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . . # # #
         . . . . .
         . . # . .
         . . . # .
         # . . . #
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . . . . #
         . . . . .
         . . . . .
         . . . . .
         . # . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . . . . #
         . . . . .
         . . . . .
         . . . . .
         . . # . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . . . . #
         . . . . .
         . . . . .
         . . . . .
         . . . # .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . . . . #
         . . . . #
         . . . . .
         . . . . .
         . . . . #
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . . . . #
         . . . . .
         . . . . #
         . . . . .
         . . . . #
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . . . . #
         . . . . .
         . . . . .
         . . . . #
         . . . . #
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . . . . #
         . . . . .
         . . # . .
         . . . # .
         . . # # #
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . . . . #
         . # . . .
         . . # . #
         . . . # #
         . . # # #
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . . . . #
         . # . # #
         . . # # #
         . . # # #
         . # # # #
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         # . # # #
         . # # # #
         . # # # #
         . # # # #
         # # # # #
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         # # # # #
         . # # # #
         # # # # #
         # # # # #
         # # # # #
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         # # # # #
         # # # # #
         # # # # #
         # # # # #
         # # # # #
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         # # # # #
         # # # # #
         # # # # #
         # # # # #
         # . # . #
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         # # # # #
         # # # # #
         # # # # #
         # . # . #
         . . . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         # # # # #
         # # # # #
         . # . # .
         . . . . .
         . . . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         # # # # #
         # . # . #
         . . . . .
         . . . . .
         . . . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . # . # .
         . . . . .
         . . . . .
         . . . . .
         . . . . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . . . . .
         . . . . .
         . . . . .
         . . . . .
         . . # . .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . . . . .
         . . . . .
         . . . . .
         . . # . .
         . # # # .
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . . . . .
         . . . . .
         . . # . .
         . # # # .
         # # # # #
         `)
-    basic.showLeds(`
+  );
+  introSprites.push(
+    images.createImage(`
         . . . . .
         . . # . .
         . # # # .
         # # # # #
         # . # . #
         `)
-    introActive = false
-    initMenu()
+  );
+  introTrailer();
+}
+function UpdateSpace() {
+  // Every 100 ms the bullets will be checked.
+  for (let bullet of ActiveBullets) {
+    if (bullet.get(LedSpriteProperty.Y) > 0) {
+      bullet.change(LedSpriteProperty.Y, -1);
+      bullet.change(LedSpriteProperty.Brightness, -30);
+    } else {
+      bullet.delete();
+    }
+    if (enemyActive) {
+      if (bullet.isTouching(SpaceDestroyer)) {
+        bullet.delete();
+        EnemyExplode();
+      }
+    }
+  }
+  // When the enemy explodes, a halo will fade in/out shown to give extra explode effect
+  for (let halo of SpaceDestroyerHalo) {
+    if (!haloReduce) {
+      halo.change(LedSpriteProperty.Brightness, 60);
+    } else {
+      halo.change(LedSpriteProperty.Brightness, -60);
+    }
+    if (halo.get(LedSpriteProperty.Brightness) >= 220) {
+      haloReduce = true;
+    }
+    if (halo.get(LedSpriteProperty.Brightness) == 0) {
+      halo.delete();
+    }
+  }
+  for (let enemyBullet of ActiveEnemyFire) {
+    if (enemyBullet.get(LedSpriteProperty.Y) <= 5) {
+      enemyBullet.change(LedSpriteProperty.Y, 1);
+    }
+    if (enemyBullet.isTouching(Spaceship)) {
+      game.removeLife(1);
+      ActiveEnemyFire.removeAt(ActiveEnemyFire.indexOf(enemyBullet));
+      enemyBullet.delete();
+      PlaySound("SPACEBOY_HIT");
+    }
+    if (enemyBullet.get(LedSpriteProperty.Y) == 4) {
+      basic.pause(100);
+      ActiveEnemyFire.removeAt(ActiveEnemyFire.indexOf(enemyBullet));
+      enemyBullet.delete();
+    }
+  }
+  if (!enemyActive) {
+    if (spawnCountdown > 0) {
+      spawnCountdown--;
+    } else {
+      enemyActive = true;
+      spawnCountdown = 10;
+      spawnSpaceDestroyer();
+    }
+  }
+  for (let explosion of SpaceDestroyerExplosion) {
+    explosion.change(LedSpriteProperty.Brightness, -25);
+  }
+  for (let particle of ExplosionParticles) {
+    if (particle.isTouchingEdge()) {
+      particle.change(LedSpriteProperty.Brightness, -60);
+      particle.move(1);
+    } else {
+      particle.move(1);
+      particle.set(LedSpriteProperty.Brightness, randint(75, 255));
+    }
+  }
+}
+function showMenuItem(item: string) {
+  music.stopAllSounds();
+  if (item == "START") {
+    images
+      .createImage(
+        `
+            . . . . .
+            . . # . .
+            . # # # .
+            # # # # #
+            # . # . #
+            `
+      )
+      .showImage(0);
+  }
+  if (item == "SOUND") {
+    if (soundOn) {
+      images
+        .createImage(
+          `
+                . . # . .
+                . # # # .
+                . # # # .
+                # # # # #
+                . . # . .
+                `
+        )
+        .showImage(0);
+    } else {
+      images
+        .createImage(
+          `
+                . . # . #
+                . # # # .
+                . # # . .
+                . # . # #
+                # . # . .
+                `
+        )
+        .showImage(0);
+    }
+  }
+  if (item == "SPEED") {
+    images
+      .createImage(
+        `
+            . # . # .
+            # # # # #
+            . # . # .
+            # # # # #
+            . # . # .
+            `
+      )
+      .showImage(0);
+  }
+}
+function SpaceShipFire() {
+  ActiveBullets.push(
+    game.createSprite(
+      Spaceship.get(LedSpriteProperty.X),
+      Spaceship.get(LedSpriteProperty.Y) - 1
+    )
+  );
+  PlaySound("SPACEBOY_FIRE");
+}
+function EnemyExplode() {
+  enemyActive = false;
+  score += 1;
+  PlaySound("ENEMY_EXPLODE");
+  // create ships explosion particles
+  for (let direction of ExplosionParticleDirections) {
+    temp_particle = game.createSprite(
+      SpaceDestroyer.get(LedSpriteProperty.X),
+      0
+    );
+    temp_particle.set(LedSpriteProperty.Direction, direction);
+    ExplosionParticles.push(temp_particle);
+  }
+  // Create ship fade out pixel
+  let destroyer = game.createSprite(SpaceDestroyer.get(LedSpriteProperty.X), 0);
+  SpaceDestroyerExplosion.push(destroyer);
+  CreateExplosionHalo(SpaceDestroyer.get(LedSpriteProperty.X));
+  SpaceDestroyer.delete();
+}
+
+function CreateExplosionHalo(location: LedSpriteProperty) {
+  // Add Halo as extra explosion effect, fades in and out
+  haloReduce = false;
+  if (location != 0) {
+    SpaceDestroyerHalo.push(game.createSprite(location - 1, 0));
+    SpaceDestroyerHalo.push(game.createSprite(location - 1, 1));
+  }
+  if (location != 4) {
+    SpaceDestroyerHalo.push(game.createSprite(location + 1, 0));
+    SpaceDestroyerHalo.push(game.createSprite(location + 1, 1));
+  }
+  SpaceDestroyerHalo.push(game.createSprite(location, 1));
+  for (let haloStart of SpaceDestroyerHalo) {
+    haloStart.set(LedSpriteProperty.Brightness, randint(10, 90));
+  }
+}
+
+function PlaySound(sound: string) {
+  if (soundOn) {
+    if (sound == "SPACEBOY_FIRE") {
+      music.play(
+        music.createSoundExpression(
+          WaveShape.Sawtooth,
+          5000,
+          1317,
+          255,
+          16,
+          200,
+          SoundExpressionEffect.None,
+          InterpolationCurve.Logarithmic
+        ),
+        music.PlaybackMode.UntilDone
+      );
+    }
+    if (sound == "SPACEBOY_HIT") {
+      music.play(
+        music.createSoundExpression(
+          WaveShape.Sawtooth,
+          606,
+          217,
+          255,
+          255,
+          200,
+          SoundExpressionEffect.None,
+          InterpolationCurve.Logarithmic
+        ),
+        music.PlaybackMode.UntilDone
+      );
+    }
+    if (sound == "ENEMY_FIRE") {
+      music.play(
+        music.createSoundExpression(
+          WaveShape.Noise,
+          1757,
+          0,
+          255,
+          0,
+          500,
+          SoundExpressionEffect.None,
+          InterpolationCurve.Linear
+        ),
+        music.PlaybackMode.UntilDone
+      );
+    }
+    if (sound == "ENEMY_EXPLODE") {
+      music.play(
+        music.createSoundExpression(
+          WaveShape.Noise,
+          579,
+          551,
+          212,
+          111,
+          100,
+          SoundExpressionEffect.None,
+          InterpolationCurve.Linear
+        ),
+        music.PlaybackMode.UntilDone
+      );
+    }
+    if (sound == "MENU_CLICK") {
+      music.play(
+        music.createSoundExpression(
+          WaveShape.Noise,
+          578,
+          522,
+          131,
+          0,
+          50,
+          SoundExpressionEffect.None,
+          InterpolationCurve.Logarithmic
+        ),
+        music.PlaybackMode.UntilDone
+      );
+    }
+    if (sound == "SOUND_ON") {
+      music.play(
+        music.createSoundExpression(
+          WaveShape.Sine,
+          1831,
+          3139,
+          215,
+          120,
+          100,
+          SoundExpressionEffect.None,
+          InterpolationCurve.Curve
+        ),
+        music.PlaybackMode.UntilDone
+      );
+    }
+    if (sound == "SOUND_OFF") {
+      music.play(
+        music.createSoundExpression(
+          WaveShape.Sine,
+          3139,
+          2193,
+          167,
+          145,
+          100,
+          SoundExpressionEffect.None,
+          InterpolationCurve.Curve
+        ),
+        music.PlaybackMode.UntilDone
+      );
+    }
+  }
+}
+function DeleteGarbage() {
+  for (let finished_bullet of ActiveBullets) {
+    if (
+      finished_bullet.get(LedSpriteProperty.Y) == 0 &&
+      finished_bullet.get(LedSpriteProperty.Brightness) == 0
+    ) {
+      finished_bullet.delete();
+      if (finished_bullet.isDeleted()) {
+        ActiveBullets.shift();
+      }
+    }
+  }
+  for (let finished_particle of ExplosionParticles) {
+    if (
+      finished_particle.get(LedSpriteProperty.Y) <= 4 &&
+      finished_particle.get(LedSpriteProperty.Brightness) == 0
+    ) {
+      finished_particle.delete();
+      if (finished_particle.isDeleted()) {
+        ExplosionParticles.shift();
+      }
+    }
+  }
+  for (let finished_explosion of SpaceDestroyerExplosion) {
+    if (finished_explosion.get(LedSpriteProperty.Brightness) <= 0) {
+      finished_explosion.delete();
+      if (finished_explosion.isDeleted()) {
+        SpaceDestroyerExplosion.shift();
+      }
+    }
+  }
+}
+function startGame() {
+  menuActive = false;
+  game.setLife(5);
+  Spaceship = game.createSprite(2, 4);
+  spawnSpaceDestroyer();
+  gameStarted = true;
+}
+function confirmMenu() {
+  if (MenuItems[menuIndex] == "SOUND") {
+    if (soundOn) {
+      PlaySound("SOUND_OFF");
+      soundOn = false;
+    } else {
+      PlaySound("SOUND_ON");
+      soundOn = true;
+    }
+    showMenuItem("SOUND");
+  }
+  if (MenuItems[menuIndex] == "START") {
+    startGame();
+  }
+}
+function introTrailer() {
+  introActive = true;
+  if (soundOn) {
+    music.play(
+      music.stringPlayable("B A A B D C D E ", 200),
+      music.PlaybackMode.LoopingInBackground
+    );
+  }
+  for (let introSprite of introSprites) {
+    introSprite.showImage(0, 150);
+  }
+  introActive = false;
+  initMenu();
 }
 input.onButtonPressed(Button.AB, function () {
-    if (introActive) {
-        music.stopAllSounds()
-    } else if (menuActive) {
-        confirmMenu()
-    } else {
-        SpaceShipFire()
-    }
-})
+  if (introActive) {
+    music.stopAllSounds();
+  } else if (menuActive) {
+    confirmMenu();
+  } else if (gameStarted) {
+    SpaceShipFire();
+  }
+});
 input.onButtonPressed(Button.B, function () {
-    if (menuActive) {
-        navigateMenu(1)
-    } else {
-        Spaceship.change(LedSpriteProperty.X, 1)
-    }
-})
-function initMenu () {
-    menuActive = true
-    MenuItems = ["START", "SOUND", "SPEED"]
-    menuIndex = 0
-    menuActive = true
-    showMenuItem("START")
+  if (menuActive) {
+    PlaySound("MENU_CLICK");
+    navigateMenu(1);
+  } else if (gameStarted) {
+    Spaceship.change(LedSpriteProperty.X, 1);
+  }
+});
+input.onButtonPressed(Button.A, function () {
+  if (menuActive) {
+    PlaySound("MENU_CLICK");
+    navigateMenu(-1);
+  } else if (gameStarted) {
+    Spaceship.change(LedSpriteProperty.X, -1);
+  }
+});
+function initMenu() {
+  menuActive = true;
+  MenuItems = ["START", "SOUND", "SPEED"];
+  menuIndex = 0;
+  menuActive = true;
+  showMenuItem("START");
 }
-function spawnSpaceDestroyer () {
-    SpaceDestroyer = game.createSprite(randint(0, 4), 0)
+function spawnSpaceDestroyer() {
+  SpaceDestroyer = game.createSprite(randint(0, 4), 0);
+  enemyActive = true;
 }
-function navigateMenu (direction2: number) {
-    menuIndex += direction2
-    if (menuIndex < 0) {
-        menuIndex = MenuItems.length - 1
-    }
-    if (menuIndex >= MenuItems.length) {
-        menuIndex = 0
-    }
-    showMenuItem(MenuItems[menuIndex])
+function navigateMenu(direction2: number) {
+  menuIndex += direction2;
+  if (menuIndex < 0) {
+    menuIndex = MenuItems.length - 1;
+  }
+  if (menuIndex >= MenuItems.length) {
+    menuIndex = 0;
+  }
+  showMenuItem(MenuItems[menuIndex]);
 }
-function EnemyFire () {
-    ActiveEnemyFire.push(game.createSprite(SpaceDestroyer.get(LedSpriteProperty.X), SpaceDestroyer.get(LedSpriteProperty.Y) + 1))
-    PlaySound("ENEMY_FIRE")
+function EnemyFire() {
+  if (enemyActive) {
+    ActiveEnemyFire.push(
+      game.createSprite(
+        SpaceDestroyer.get(LedSpriteProperty.X),
+        SpaceDestroyer.get(LedSpriteProperty.Y) + 1
+      )
+    );
+    PlaySound("ENEMY_FIRE");
+  }
 }
-let menuIndex = 0
-let MenuItems: string[] = []
-let gameStarted = false
-let menuActive = false
-let score = 0
-let temp_particle: game.LedSprite = null
-let Spaceship: game.LedSprite = null
-let SpaceDestroyer: game.LedSprite = null
-let ActiveBullets: game.LedSprite[] = []
-let ExplosionParticleDirections: number[] = []
-let ExplosionParticles: game.LedSprite[] = []
-let introActive = false
-let soundOn = false
-let temp_pos = 0
-let ActiveEnemyFire : game.LedSprite[] = []
-music.setBuiltInSpeakerEnabled(true)
-soundOn = true
-let menuSpeed = 100
-let gameSpeed = 100
-let enemySpeed = 200
-let enemyFireSpeed = 3500
-let garbageCollectorSpeed = 3000
-introActive = true
-ActiveEnemyFire = []
-ExplosionParticles = []
-ExplosionParticleDirections = [
--135,
-135,
-45,
--45
-]
-introTrailer()
+let enemyActive = false;
+let menuIndex = 0;
+let MenuItems: string[] = [];
+let gameStarted = false;
+let menuActive = false;
+let temp_particle: game.LedSprite = null;
+let score = 0;
+let Spaceship: game.LedSprite = null;
+let SpaceDestroyer: game.LedSprite = null;
+let ActiveBullets: game.LedSprite[] = [];
+let introSprites: Image[] = [];
+let ExplosionParticleDirections: number[] = [];
+let ExplosionParticles: game.LedSprite[] = [];
+let SpaceDestroyerExplosion: game.LedSprite[] = [];
+let SpaceDestroyerHalo: game.LedSprite[] = [];
+let ActiveEnemyFire: game.LedSprite[] = [];
+let haloReduce = false;
+let introActive = false;
+let soundOn = false;
+let enemyActionSpeed = 0;
+let temp_pos = 0;
+music.setBuiltInSpeakerEnabled(true);
+let enemyLocation = randint(0, 4);
+let enemySpeed = 200;
+let enemyFireSpeed = 3500;
+soundOn = true;
+let spawnCountdown = 10;
+let menuSpeed = 100;
+let gameSpeed = 100;
+let garbageCollectorSpeed = 3000;
+introActive = true;
+ActiveEnemyFire = [];
+ExplosionParticles = [];
+SpaceDestroyerExplosion = [];
+SpaceDestroyerHalo = [];
+ExplosionParticleDirections = [-135, 135, 45, -45];
+// Levels array with speed settings?
+let levels = [];
+createIntroImages();
+
 loops.everyInterval(garbageCollectorSpeed, function () {
-    DeleteGarbage()
-})
+  DeleteGarbage();
+});
+
+loops.everyInterval(4000, function () {
+  if (enemyActive) {
+    enemyLocation = randint(0, 4);
+  }
+});
 loops.everyInterval(enemyFireSpeed, function () {
-    if (gameStarted) {
-        EnemyFire()
-    }
-})
+  if (gameStarted) {
+    EnemyFire();
+  }
+});
 loops.everyInterval(gameSpeed, function () {
-    if (gameStarted) {
-        UpdateSpace()
-    }
-})
+  if (gameStarted) {
+    UpdateSpace();
+  }
+});
 basic.forever(function () {
-    if (game.isGameOver()) {
-        basic.showNumber(score)
-        control.reset()
+  if (game.isGameOver()) {
+    gameStarted = false;
+    menuActive = false;
+    basic.showString("Score:");
+    basic.showNumber(score);
+    basic.pause(2000);
+    control.reset();
+  }
+});
+loops.everyInterval(enemySpeed, function () {
+  if (enemyActive) {
+    if (enemyLocation < SpaceDestroyer.get(LedSpriteProperty.X)) {
+      SpaceDestroyer.change(LedSpriteProperty.X, -1);
     }
-})
+    if (enemyLocation > SpaceDestroyer.get(LedSpriteProperty.X)) {
+      SpaceDestroyer.change(LedSpriteProperty.X, 1);
+    }
+  }
+});
