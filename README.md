@@ -1,24 +1,43 @@
 
-> Open this page at [https://sjoerdzzid.github.io/uberspaceboy/](https://sjoerdzzid.github.io/uberspaceboy/)
+# UberSpaceBoy
 
-## Use as Extension
+A retro-style space shooter for the BBC micro:bit, built by sjoerdzvz and his son tencezvz. Steer a spaceship along the bottom row of the LED matrix with buttons A/B, shoot down enemies that spawn from the top, and rack up points as explosions burst into particles across the 5x5 grid.
 
-This repository can be added as an **extension** in MakeCode.
+The project leans on old-school game mechanics adapted to the micro:bit's tiny 5x5 LED display: sprites for the ship, bullets, enemies, and explosion particles are animated using `loops.everyInterval` timing loops, and a dedicated garbage-collection loop (`DeleteGarbage`) prunes finished sprites so the game keeps running smoothly without leaking memory. Sound effects are generated with `music.createSoundExpression` for a chiptune feel, and there's a simple menu (start / sound / speed) navigated with the buttons.
 
-* open [https://makecode.microbit.org/](https://makecode.microbit.org/)
-* click on **New Project**
-* click on **Extensions** under the gearwheel menu
-* search for **https://github.com/sjoerdzzid/uberspaceboy** and import
+It's fully usable as a MakeCode extension, so the same game can be explored and edited in the visual block editor as well as in TypeScript, making it a nice example for learning both game programming concepts and MakeCode/micro:bit development.
 
-## Edit this project
+## Collision detection
 
-To edit this repository in MakeCode.
+All hit detection uses the micro:bit game sprite library's built-in `isTouching()` and `isTouchingEdge()` checks — no manual coordinate math needed. A few examples from `main.ts`:
 
-* open [https://makecode.microbit.org/](https://makecode.microbit.org/)
-* click on **Import** then click on **Import URL**
-* paste **https://github.com/sjoerdzzid/uberspaceboy** and click import
+Player bullet hits an enemy:
 
-#### Metadata (used for search, rendering)
+```ts
+if (bullet.isTouching(SpaceDestroyer)) {
+    bullet.delete()
+    EnemyExplode()
+}
+```
 
-* for PXT/microbit
-<script src="https://makecode.com/gh-pages-embed.js"></script><script>makeCodeRender("{{ site.makecode.home_url }}", "{{ site.github.owner_name }}/{{ site.github.repository_name }}");</script>
+Enemy bullet hits the player's ship:
+
+```ts
+if (enemyBullet.isTouching(Spaceship)) {
+    game.removeLife(1)
+    enemyBullet.delete()
+    PlaySound("SPACEBOY_HIT")
+    ActiveEnemyFire.splice(ActiveEnemyFire.indexOf(enemyBullet), 1)
+}
+```
+
+Explosion particles fading out as they reach the edge of the screen:
+
+```ts
+if (particle.isTouchingEdge()) {
+    particle.change(LedSpriteProperty.Brightness, -60)
+    particle.move(1)
+}
+```
+
+Because every bullet, enemy, and particle is a real sprite, collisions "just work" the same way regardless of how many are on screen at once — the timing loop just walks the active sprite lists each tick and checks each one.
